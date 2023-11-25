@@ -1,23 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-# Create your views here.
-
-rooms = [
-    {'id':1, 'name': "Learning BufferOverFlow"},
-    {'id':2, 'name': "Front End Dev"},
-    {'id':3, 'name': "Self Help Group"},
-]
+from .models import Room
 
 def home(request):
+    rooms = Room.objects.all() # ModelName.objects => model manager to query from the database
     context = {'rooms':rooms}
     return render(request, 'base/home.html', context=context)
 
 def room(request, id:str):
-    froom = None
-    for room in rooms:
-        if room['id'] == int(id):
-            froom = room
-            break
-    context = {'room': froom}
+    room = Room.objects.get(id=id)
+    context = {'room': room}
     return render(request, 'base/room.html', context=context)
