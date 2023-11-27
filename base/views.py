@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Room
@@ -15,6 +15,11 @@ def room(request, id:str):
     return render(request, 'base/room.html', context=context)
 
 def create_room(request):
+    if request.method == "POST":
+        form = RoomForm(request.POST) # form data is stored in request.POST along with csrf token
+        if form.is_valid():
+            form.save()
+            return redirect('home') # using the name value of url
     form = RoomForm()
     context = {'form':form}
     return render(request, 'base/create-room.html', context=context)
