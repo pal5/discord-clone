@@ -5,8 +5,8 @@ from .models import Room, Topic
 from .forms import RoomForm
 
 def home(request):
-    q = request.GET.get('q')
-    rooms = Room.objects.filter(topic__name=q) # ModelName.objects => model manager to query from the database
+    q = request.GET.get('q') if request.GET.get('q') is not None else ""
+    rooms = Room.objects.filter(topic__name__icontains=q) # ModelName.objects => model manager to query from the database
     topics = Topic.objects.all()
     context = {'rooms':rooms,'topics':topics}
     return render(request, 'base/home.html', context=context)
