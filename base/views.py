@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -44,6 +45,7 @@ def room(request, id:str):
     context = {'room': room}
     return render(request, 'base/room.html', context=context)
 
+@login_required(login_url='login')
 def create_room(request):
     if request.method == "POST":
         form = RoomForm(request.POST) # form data is stored in request.POST along with csrf token
@@ -54,6 +56,7 @@ def create_room(request):
     context = {'form':form}
     return render(request, 'base/create-room.html', context=context)
 
+@login_required(login_url='login')
 def update_room(request, id):
     room = Room.objects.get(id = id)
     form = RoomForm(instance=room)
@@ -65,6 +68,7 @@ def update_room(request, id):
     context = {'form':form}
     return render(request, 'base/create-room.html', context=context)
 
+@login_required(login_url='login')
 def delete_room(request, id):
     room = Room.objects.get(id=id)
 
