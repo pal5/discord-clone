@@ -10,6 +10,7 @@ from .models import Room, Topic
 from .forms import RoomForm
 
 def login_page(request):
+    page = 'login'
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == "POST":
@@ -27,7 +28,12 @@ def login_page(request):
             return redirect('home')
         else:
             messages.error(request, 'Username or Password is incorrect')
-    context = {}
+    context = {'page':page}
+    return render(request, 'base/login-register.html', context)
+
+def sign_up(request):
+    page = 'signup'
+    context = {'page':page}
     return render(request, 'base/login-register.html', context)
 
 def logout_page(request):
