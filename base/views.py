@@ -27,6 +27,10 @@ def login_page(request):
     context = {}
     return render(request, 'base/login-register.html', context)
 
+def logout_page(request):
+    logout(request)
+    return redirect('home')
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ""
     rooms = Room.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)) # ModelName.objects => model manager to query from the database
