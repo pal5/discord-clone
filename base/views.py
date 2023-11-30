@@ -84,7 +84,9 @@ def create_room(request):
     if request.method == "POST":
         form = RoomForm(request.POST) # form data is stored in request.POST along with csrf token
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user
+            room.save()
             return redirect('home') # using the name value of url
     form = RoomForm()
     context = {'form':form}
