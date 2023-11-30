@@ -56,7 +56,7 @@ def home(request):
     rooms = Room.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)) # ModelName.objects => model manager to query from the database
     topics = Topic.objects.all()
     rooms_count = rooms.count()
-    rooms_messages = Message.objects.all()
+    rooms_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
     context = {'rooms':rooms,'topics':topics,'rooms_count':rooms_count, 'rooms_messages':rooms_messages}
     return render(request, 'base/home.html', context=context)
 
