@@ -61,7 +61,8 @@ def home(request):
 
 def room(request, id:str):
     room = Room.objects.get(id=id)
-    context = {'room': room}
+    room_messages = room.message_set.all().order_by('-created') # using parent room object you can access all children object ( in one:many mapping )
+    context = {'room': room, 'room_messages':room_messages}
     return render(request, 'base/room.html', context=context)
 
 @login_required(login_url='login')
