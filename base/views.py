@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 
 def login_page(request):
@@ -61,6 +61,9 @@ def home(request):
 
 def room(request, id:str):
     room = Room.objects.get(id=id)
+    if request.method == "POST":
+        message = Message.objects.create(user=request.user, body=request.POST.get('body'), room=room )
+        return redirect('room', id=room.id)
     room_messages = room.message_set.all().order_by('-created') # using parent room object you can access all children object ( in one:many mapping )
     context = {'room': room, 'room_messages':room_messages}
     return render(request, 'base/room.html', context=context)
