@@ -71,6 +71,11 @@ def room(request, id:str):
     context = {'room': room, 'room_messages':room_messages, 'participants': participants}
     return render(request, 'base/room.html', context=context)
 
+def user_profile(request, id):
+    user = User.objects.get(id=id)
+    context = {'user':user}
+    return render(request, 'base/profile.html', context)
+
 @login_required(login_url='login')
 def create_room(request):
     if request.method == "POST":
