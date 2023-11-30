@@ -63,9 +63,11 @@ def room(request, id:str):
     room = Room.objects.get(id=id)
     if request.method == "POST":
         message = Message.objects.create(user=request.user, body=request.POST.get('body'), room=room )
+        room.participants.add(request.user)
         return redirect('room', id=room.id)
+    participants = room.participants.all()
     room_messages = room.message_set.all().order_by('-created') # using parent room object you can access all children object ( in one:many mapping )
-    context = {'room': room, 'room_messages':room_messages}
+    context = {'room': room, 'room_messages':room_messages, 'participants': participants}
     return render(request, 'base/room.html', context=context)
 
 @login_required(login_url='login')
